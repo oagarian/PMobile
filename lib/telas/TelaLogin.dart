@@ -180,7 +180,7 @@ TextEditingController emailController = TextEditingController();
       context,
       MaterialPageRoute(
         builder: (context) {
-          return const RegisterUser();
+          return TelaCadastrar();
         },
       ),
     );
