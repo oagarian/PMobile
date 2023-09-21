@@ -4,6 +4,6 @@ import 'package:projeto/telas/TelaPerfil.dart';
 
 void main() {
   runApp(
-    MaterialApp(debugShowCheckedModeBanner: false, home: TelaPerfil()),
+    MaterialApp(debugShowCheckedModeBanner: false, home: TelaLogin()),
   );
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto/telas/telaPrincipal.dart';
 import 'package:projeto/widgets/ContainerTopo.dart';
@@ -9,6 +10,12 @@ class TelaLogin extends StatefulWidget {
 }
 
 class _TelaLoginState extends State<TelaLogin> {
+TextEditingController userController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool mostrarSenha = true;
+TextEditingController emailController = TextEditingController();
+  String email = '';
+  String Password = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,26 +34,16 @@ class _TelaLoginState extends State<TelaLogin> {
               textTop: 115,
               fontSize: 30,
             ),
-            buildForm(context),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-buildForm(BuildContext context) {
-  String email = '';
-  String Password = '';
-  return Container(
+            Container(
     padding: EdgeInsets.only(left: 25, right: 25, top: 80),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         TextField(
+          controller: emailController,
           onChanged: (Text) {
-            email = Text;
+            email= Text;
           },
           keyboardType: TextInputType.emailAddress,
           decoration: const InputDecoration(
@@ -57,21 +54,41 @@ buildForm(BuildContext context) {
         ),
         SizedBox(
           height: 10,
-        ),
-        TextField(
-          obscureText: true,
-          onChanged: (Text) {
-            Password = Text;
-          },
-          decoration: InputDecoration(
-            labelText: 'Password',
-            suffixIcon: Icon(Icons.visibility),
-            border: OutlineInputBorder(),
-          ),
-        ),
-        SizedBox(
-          height: 15,
-        ),
+        ),const SizedBox(height: 16),
+              TextField(
+                controller: passwordController,
+                obscureText: mostrarSenha,
+                decoration: InputDecoration(
+                  hintText: 'Senha',
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      setState(() {
+                        mostrarSenha = !mostrarSenha;
+                      });
+                    },
+                    child: mostrarSenha
+                        ? Icon(CupertinoIcons.eye_fill)
+                        : Icon(CupertinoIcons.eye_slash),
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+        // TextField(
+        //   obscureText: true,
+        //   onChanged: (Text) {
+        //     Password = Text;
+        //   },
+        //   decoration: InputDecoration(
+        //     labelText: 'Password',
+        //     suffixIcon: Icon(Icons.visibility),
+        //     border: OutlineInputBorder(),
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: 15,
+        // ),
+        
+
         Center(
           child: Container(
             margin: const EdgeInsets.all(20.0),
@@ -86,15 +103,15 @@ buildForm(BuildContext context) {
                   ),
                 ),
                 onPressed: () {
-                  if (email == 'aluno.com.br' && Password == '123') {
-                    print('correto');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TelaPrincipal()),
-                    );
-                  } else {
-                    print('aaaaa');
-                  }
+                  // if (email == 'aluno.com.br' && Password == '123') {
+                  //   print('correto');
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(builder: (context) => TelaPrincipal()),
+                  //   );
+                  // } else {
+                  //   print('aaaaa');
+                  // }
                 },
                 child: Text(
                   'ENTRAR',
@@ -127,5 +144,47 @@ buildForm(BuildContext context) {
         ),
       ],
     ),
-  );
+  )
+          ],
+        ),
+      ),
+    );
+  }
+  Future<void> onPressed() async {
+    String email = userController.text;
+    String password = passwordController.text;
+
+    
+
+    bool result = await UserDao().autenticar(email: email, password: password);
+    if (result) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return TelaPrincipal();
+          },
+        ),
+      );
+    } else {
+      final snackBar = SnackBar(
+        content: Text('Usuário e/ou senha incorretos!'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  void onRegisterUser() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const RegisterUser();
+        },
+      ),
+    );
+  }
 }
+
+

@@ -124,6 +124,7 @@ class _TelaPerfilState extends State<TelaPerfil> {
         image != null
             ? CircleAvatar(
                 backgroundImage: MemoryImage(image!),
+                radius: 75,
               )
             : Positioned(
                 child: Container(
